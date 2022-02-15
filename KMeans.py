@@ -9,6 +9,7 @@ class KMeansClustering():
         self.no_samples = X.shape[0]
     
     def centroids_init(self):
+        #   Choice 3 data points to as 3 centroids initialization
         centroids = self.X[np.random.choice(self.no_samples, self.K, replace = False)]
         return centroids
     
@@ -22,11 +23,6 @@ class KMeansClustering():
         distances = self.cal_distances(centroids)
         return np.argmin(distances, axis = 1)
     
-    # def update_centroids(self, centroids, labels):
-    #     for k in range(self.K):
-    #         centroids[k] = np.mean(self.X[labels == k], axis = 0)
-    #     return centroids
-    
     def update_centroids(self, labels):
         centroids = np.zeros((self.K, self.X.shape[1]))
         for k in range(self.K):
@@ -39,9 +35,9 @@ class KMeansClustering():
         while True:
             #   Assign labels for all data points with each it's mean
             labels.append(self.assign_labels(centroids_lst[-1]))
-            #   Calculate and update new centroids
+            #   Calculate and update new centroids 
             new_centroids = self.update_centroids(labels[-1])
-            #   Check if 2 array is equal
+            #   Check if coordinate of new_centroids and old_centroids are equal => Stop updating new centroids
             if np.array_equal(new_centroids, centroids_lst[-1]):
                 break
             centroids_lst.append(new_centroids)
@@ -63,7 +59,7 @@ class KMeansClustering():
                     
 if __name__ == "__main__":
     
-    # np.random.seed(4)
+    np.random.seed(4)
     n_samples = 500
     means = [[3, 3], [-3, 4], [0, -3]]
     cov = [[1.5, 0], [0, 2]]
@@ -78,5 +74,4 @@ if __name__ == "__main__":
     print('Trained centroids\n', centers)
     
     model.visualize(labels, 'result')
-    
     
